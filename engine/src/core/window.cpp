@@ -26,9 +26,10 @@ namespace grafik
         m_window = glfwCreateWindow(m_width, m_height, title.c_str(), NULL, NULL);
 
 
-        //if (glfwRawMouseMotionSupported())
-        glfwSetInputMode(m_window, GLFW_RAW_MOUSE_MOTION, GLFW_TRUE);
-        //glfwSetInputMode(m_window, GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
+        if (glfwRawMouseMotionSupported())
+            glfwSetInputMode(m_window, GLFW_RAW_MOUSE_MOTION, GLFW_TRUE);
+        glfwSetInputMode(m_window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+
         glfwSetWindowUserPointer(m_window, this);
 
         // callbacks
@@ -42,7 +43,11 @@ namespace grafik
     void Window::Update()
     {
         glfwSwapBuffers(m_window);
-        glfwPollEvents(); // wait events?
+        glfwWaitEvents(); // wait events?
+        double x, y;
+        glfwGetCursorPos(m_window, &x, &y);
+
+        std::cout << x << " \t" << y << "\n";
     }
 
     void Window::Clear(const Color& color)

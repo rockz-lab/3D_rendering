@@ -5,7 +5,7 @@
 
 namespace grafik
 {
-    class Application : public Listener
+    class grafikAPI Application : public Listener
     {
     public:
         Application();

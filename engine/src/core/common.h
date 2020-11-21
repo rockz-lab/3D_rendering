@@ -4,6 +4,14 @@
 #include <vector>
 #include <memory>
 
+#if defined(_WIN32) && defined(_BUILD_DLL)
+#define grafikAPI __declspec(dllexport)
+#elif defined(_WIN32)
+#define grafikAPI __declspec(dllimport)
+#elif defined(__GNUC__)
+#define grafikAPI
+#endif
+
 namespace grafik
 {
     struct Color

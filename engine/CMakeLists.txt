@@ -8,25 +8,29 @@ add_library(engine SHARED ${engineSRCS})
 # required packages
 find_package(glm CONFIG REQUIRED)
 find_package(GLEW REQUIRED)
-find_package(glfw3 3.2 REQUIRED)
+find_package(glfw3 CONFIG REQUIRED)
 find_package(OpenGL REQUIRED)
 
+
 target_link_libraries(engine PRIVATE glm)
+target_link_libraries(engine PUBLIC glfw)
 
 # Link libraries on Linux and on Windows with a vcpkg installation
 if (MSVC)
     target_link_libraries(engine PRIVATE GLEW::GLEW)
-    #target_link_libraries(engine PRIVATE SDL2::SDL2 SDL2::SDL2main)
+    
+    target_compile_definitions(engine PRIVATE _BUILD_DLL=1)  # set the BUID_DLL define for dll export/import
 
+    # post build step: copy the dll
+    add_custom_command(TARGET engine POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_FILE:engine> ${CMAKE_SOURCE_DIR}/out/build/x64-Debug/app)
 else (MSVC)
     target_link_libraries(engine PRIVATE GLEW)
-
     target_link_libraries(engine PRIVATE ${OPENGL_LIBRARIES})
-    target_include_directories(engine PRIVATE /usr/include/SDL2)
+    
     target_include_directories(engine PRIVATE ${OPENGL_INCLUDE_DIRS})
+    
 endif (MSVC)
 
-target_link_libraries(engine PRIVATE glfw)
 
 target_include_directories(engine PUBLIC
     ${PROJECT_SOURCE_DIR}/src

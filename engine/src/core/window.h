@@ -5,6 +5,7 @@
 
 #include "GLFW/glfw3.h"
 
+
 namespace grafik
 {
     class Window : public Publisher
