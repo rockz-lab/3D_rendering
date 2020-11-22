@@ -1,5 +1,6 @@
 #pragma once
 #include "common.h"
+#include "input.h"
 
 // interface for the event system
 // all objects that subscribe or publish events must derive from the respective base classes
@@ -9,13 +10,41 @@ namespace grafik
 {
     enum eventType
     {
-        MOUSE_MOVE
+        MOUSE_MOVE,
+        WINDOW_CLOSE,
+
+        KEY_PRESS,
+        KEY_RELEASE,
+        KEY_REPEAT
     };
+
 
     struct eventData
     {
         eventType type;
-        double xNew, yNew;
+    };
+
+    struct mouseMovData : public eventData
+    {
+        mouseMovData() : eventData()
+        {
+            type = MOUSE_MOVE;
+            x_new = 0;
+            y_new = 0;
+        }
+        
+        float x_new;
+        float y_new;
+    };
+
+    struct keyPressData : public eventData
+    {
+        keyPressData() : eventData()
+        {
+            type = KEY_PRESS;
+        }
+        int key;
+        
     };
 
     class Listener
@@ -36,6 +65,10 @@ namespace grafik
     class Publisher
     {
     public:
+        virtual ~Publisher()
+        {
+            listeners.clear();
+        }
         void addListener(Listener* listener);
 
         // notify
@@ -43,7 +76,7 @@ namespace grafik
 
         void publishEvent(void* data);
     private:
-        std::vector<std::unique_ptr<Listener>> listeners;
+        std::vector<Listener*> listeners;
 
     };
 

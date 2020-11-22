@@ -3,7 +3,14 @@ project(testEngine VERSION 0.1)
 # get all source files in the source directory
 file( GLOB_RECURSE  engineSRCS ${PROJECT_SOURCE_DIR}/src/*.cpp ${PROJECT_SOURCE_DIR}/third_party/*.cpp )
 
-add_library(engine SHARED ${engineSRCS})
+# option to link dynamically:
+option(STATIC_LIB "ON: Link Dynamically, OFF: Link Statically" ON)
+
+if (STATIC_LIB)
+    add_library(engine ${engineSRCS})
+elseif(STATIC_LIB)
+    add_library(engine SHARED ${engineSRCS})
+endif(STATIC_LIB)
 
 # required packages
 find_package(glm CONFIG REQUIRED)
@@ -19,10 +26,11 @@ target_link_libraries(engine PUBLIC glfw)
 if (MSVC)
     target_link_libraries(engine PRIVATE GLEW::GLEW)
     
-    target_compile_definitions(engine PRIVATE _BUILD_DLL=1)  # set the BUID_DLL define for dll export/import
-
+    if (NOT STATIC_LIB)
+        target_compile_definitions(engine PRIVATE _BUILD_DLL=1)  # set the BUID_DLL define for dll export/import
+    endif (NOT STATIC_LIB)
     # post build step: copy the dll
-    add_custom_command(TARGET engine POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_FILE:engine> ${CMAKE_SOURCE_DIR}/out/build/x64-Debug/app)
+    add_custom_command(TARGET engine POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_FILE:engine> ${PROJECT_BINARY_DIR}/../app)
 else (MSVC)
     target_link_libraries(engine PRIVATE GLEW)
     target_link_libraries(engine PRIVATE ${OPENGL_LIBRARIES})
@@ -31,6 +39,9 @@ else (MSVC)
     
 endif (MSVC)
 
+if (STATIC_LIB)
+    target_compile_definitions(engine PRIVATE _BUILD_STATIC=1)
+endif(STATIC_LIB)
 
 target_include_directories(engine PUBLIC
     ${PROJECT_SOURCE_DIR}/src

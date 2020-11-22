@@ -5,7 +5,7 @@ grafik::Listener::~Listener() { }
 
 void grafik::Publisher::addListener(grafik::Listener *listener)
 {
-    listeners.push_back(std::unique_ptr<Listener>(listener));
+    listeners.push_back(listener);
 }
 
 void grafik::Publisher::publishEvent()

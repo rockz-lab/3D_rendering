@@ -10,16 +10,16 @@ namespace grafik
     public:
         Application();
 
-        //virtual ~Application() {}
-
         void Run();
 
         void onEvent() override;
         void onEvent(void* data) override;
 
-    private:
+        void addWinListener();
+    protected:
         void Update();
         std::unique_ptr<Window> m_window;
+        bool m_runApp = true;
     };
 }
 
