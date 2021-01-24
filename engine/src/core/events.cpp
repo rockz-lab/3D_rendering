@@ -1,26 +1,28 @@
 #include "events.h"
 
 
-grafik::Listener::~Listener() { }
-
-void grafik::Publisher::addListener(grafik::Listener *listener)
+namespace grafik
 {
-    listeners.push_back(listener);
-}
 
-void grafik::Publisher::publishEvent()
-{
-    for (auto& l : listeners)
+    void eventNode::addListener(eventNode* listener)
     {
-        l->onEvent();
+        listeners.push_back(listener);
     }
-}
 
-void grafik::Publisher::publishEvent(void* data)
-{
-    for (auto& l : listeners)
+    void eventNode::publishEvent()
     {
-        l->onEvent(data);
+        for (auto& l : listeners)
+        {
+            l->onEvent();
+        }
     }
-}
 
+    void eventNode::publishEvent(void* data)
+    {
+        for (auto& l : listeners)
+        {
+            l->onEvent(data);
+        }
+    }
+
+}

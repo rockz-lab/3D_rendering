@@ -4,6 +4,7 @@ project(testApp VERSION 0.1)
 add_executable(testApp ${PROJECT_SOURCE_DIR}/src/main.cpp
 		${PROJECT_SOURCE_DIR}/src/test.cpp)
 
+target_compile_definitions(testApp PRIVATE _PROJECT_SOURCE=${PROJECT_SOURCE_DIR})
 #add_library(engine SHARED)
 #set_property(TARGET engine PROPERTY IMPORTED_LOCATION ${CMAKE_SOURCE_DIR}/build/engine)
 

@@ -1,5 +1,6 @@
 project(testEngine VERSION 0.1)
 
+#set(CMAKE_CXX_STANDARD 17)
 # get all source files in the source directory
 file( GLOB_RECURSE  engineSRCS ${PROJECT_SOURCE_DIR}/src/*.cpp ${PROJECT_SOURCE_DIR}/third_party/*.cpp )
 
@@ -24,13 +25,14 @@ target_link_libraries(engine PUBLIC glfw)
 
 # Link libraries on Linux and on Windows with a vcpkg installation
 if (MSVC)
+        
     target_link_libraries(engine PRIVATE GLEW::GLEW)
-    
     if (NOT STATIC_LIB)
         target_compile_definitions(engine PRIVATE _BUILD_DLL=1)  # set the BUID_DLL define for dll export/import
     endif (NOT STATIC_LIB)
     # post build step: copy the dll
     add_custom_command(TARGET engine POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_FILE:engine> ${PROJECT_BINARY_DIR}/../app)
+
 else (MSVC)
     target_link_libraries(engine PRIVATE GLEW)
     target_link_libraries(engine PRIVATE ${OPENGL_LIBRARIES})

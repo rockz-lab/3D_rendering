@@ -3,6 +3,8 @@
 #include <iostream>
 #include <vector>
 #include <memory>
+#include <glm/glm.hpp>
+#include <string>
 
 #if defined(_WIN32) && defined(_BUILD_DLL)
 #define grafikAPI __declspec(dllexport)
@@ -15,6 +17,7 @@
 
 namespace grafik
 {
+    // remove this
     struct Color
     {
         Color(float r, float g, float b) : r(r), g(g), b(b)

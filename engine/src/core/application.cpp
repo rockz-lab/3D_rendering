@@ -1,4 +1,5 @@
 #include "application.h"
+#include <memory>
 
 
 
@@ -7,7 +8,9 @@ namespace grafik
     Application::Application()
     {
         m_window = std::unique_ptr<Window>(new Window("title", 559, 559));
-
+        
+        m_scene = std::make_unique<Scene>();
+        
         // subscribe to window
         m_window->addListener(this);
 
@@ -25,12 +28,13 @@ namespace grafik
 
     void Application::Update()
     {
+        Color color(1, 0, 0);
+        m_window->Clear(color);
 
+        
+        m_scene->Draw();
         m_window->Update();
 
-        Color color(1, 0, 0);
-
-        m_window->Clear(color);
     }
 
     void Application::onEvent(void *data)

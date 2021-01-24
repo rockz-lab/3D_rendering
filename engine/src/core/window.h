@@ -2,13 +2,14 @@
 
 #include "common.h"
 #include "events.h"
+#include "input.h"
 
 #include "GLFW/glfw3.h"
 
 
 namespace grafik
 {
-    class Window : public Publisher
+    class Window : public eventNode
     {
     public:
         Window(const std::string& title, int width, int height);
